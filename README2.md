@@ -69,24 +69,77 @@ default: 'htmlContent'
 ```
 ## 展示用法案例
 ```html
-<!--
-  用法案例
-  htmlContent 父元素的id名称
-  content 整个文本内容
-  keyword 搜索的关键词
-  ref="search" 子元素
- <div id="htmlContent">
-  <crossTextHighLight
-    class="search-highlight"
-    ref="search"
-    @current-change="currentChange"
-    :content="text"
-    :keyword="keyword"
-    highlightStyle="background: rgb(224, 234, 250)"
-    currentStyle="{background: rgb(224, 234, 250)}"
-  />
- </div>
+<template>
+    <div id="app">
+        <div ref="htmlContent" id="htmlContent">
+            <button @click="goTo">按时</button>
+            <button @click="goBfter">上一个</button>
+            <button @click="goAfter">下一个</button>
+            <button @click="goAfter2">下一个</button>
+            <crossTextHighLight
+                    ref="search"
+                    @current-change="currentChange"
+                    :content="text"
+                    :keyword="keyword"
+                    :is-need-mark="true"
+                    :pEle="`htmlContent`"
+                    @match-count-change="matchCountChange"
+                    :highlightStyle="`background: #ffff00`"
+                    :currentStyle="`background: rgb(224, 234, 250)`"
+            />
 
- 文本标注序号用法
--->
+        </div>
+    </div>
+</template>
+
+<script>
+    import crossTextHighLight from "crossTextHighLight";
+    export default {
+        name: 'App',
+        components: {
+            crossTextHighLight
+        },
+        data(){
+            return {
+                text: ``,
+                keyword: "",
+                matchCount: 0,
+            }
+        },
+        methods: {
+            currentChange(){
+
+            },
+            matchCountChange (count) {
+                this.matchCount = count
+            },
+            goTo(){
+                this.keyword = ""
+                console.log(this.$refs.search)
+                this.$refs.search.scrollToOrder(2,this.$refs.search)
+            },
+            goBfter(){
+                this.$refs.search.scrollToOrder(1,this.$refs.search)
+            },
+            goAfter(){
+                this.$refs.search.scrollToOrder(2,this.$refs.search)
+            },
+            goAfter2(){
+                this.$refs.search.scrollToOrder(3,this.$refs.search)
+            }
+        }
+    }
+</script>
+
+<style>
+    *{
+        line-height: 80px;
+    }
+    #htmlContent{
+        height: 600px;
+        overflow-y: auto;
+    }
+</style>
+
+
 ```

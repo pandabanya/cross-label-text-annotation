@@ -125,9 +125,6 @@ export default {
     styleSelector() {
       return `style[${this.flag}]`
     },
-    watchIsNeedMark(){
-      return this.isNeedMark
-    }
   },
   watch: {
     watchString: {
@@ -140,12 +137,6 @@ export default {
       immediate: true,
       handler() {
         this.setStyle()
-        if(this.isNeedMark){
-          console.log(11)
-          // this.$nextTick(()=>{
-          //   this.markNumber(this.lightIndex,this.pEle)
-          // })
-        }
       }
     },
     lightIndex: {
@@ -312,9 +303,6 @@ export default {
         if(fonts[i].attributes.length > 0){
           arr.push(fonts[i])
         }
-      }
-      if(!arr[index]){
-        throw new Error("未找到该节点")
       }
       console.dir(arr)
       let canvas = document.createElement('canvas')
