@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import crossTextHighLight from "../package/crossTextHighLight/index.vue";
+import crossTextHighLight from "@/components/crossTextHighLight/index.vue";
 export default {
   name: 'App',
   components: {

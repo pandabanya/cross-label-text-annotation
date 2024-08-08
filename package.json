@@ -1,8 +1,13 @@
 {
-  "name": "cross-label-text-annotation",
+  "name": "cross-text-highlight",
   "version": "0.1.0",
   "private": false,
-  "main": "dist/cross-label-text-annotation.umd.min.js",
+  "keywords": [
+    "搜索高亮",
+    "vue",
+    "关键字高亮",
+    "vue-search-highlight"
+  ],
   "author": {
     "name": "pzc",
     "email": "782120844@qq.com"
@@ -11,7 +16,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "package": "vue-cli-service build --target lib package/index.js --name cross-label-text-annotation --dest cross-label-text-annotation",
+    "build-bundle": "vue-cli-service build --target lib --name cross-text-highlight ./src/index.js",
     "lib": "vue-cli-service build --target lib package/index.js"
   },
   "dependencies": {
