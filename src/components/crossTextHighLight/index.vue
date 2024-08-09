@@ -304,6 +304,9 @@ export default {
           arr.push(fonts[i])
         }
       }
+      if(!arr[index]){
+        console.log("未找到该节点")
+      }
       console.dir(arr)
       let canvas = document.createElement('canvas')
       canvas.width = 200 // 设置canvas宽度

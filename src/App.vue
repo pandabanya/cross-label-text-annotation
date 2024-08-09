@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <div ref="htmlContent" id="htmlContent">
-      <button @click="goTo">按时</button>
-      <button @click="goBfter">上一个</button>
-      <button @click="goAfter">下一个</button>
-      <button @click="goAfter2">下一个</button>
+      <button @click="goTo">指定位置</button>
+      <button @click="goBfter">第一个</button>
+      <button @click="goAfter">第二个</button>
+      <button @click="goAfter2">第三个</button>
       <crossTextHighLight
           ref="search"
           @current-change="currentChange"
