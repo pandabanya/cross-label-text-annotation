@@ -6,7 +6,7 @@ npm install
 ```
 # 基于vue-search-highlight 的跨标签可标注序号的文本高亮插件
 
-[演示案例图展示](https://images.pexels.com/photos/27703469/pexels-photo-27703469.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+[演示案例图展示](https://s3.bmp.ovh/imgs/2024/08/13/3bfd6518df6b48dc.png)
 ## 参数配置说明
 
 说明除了 基于 vue-search-highlight 的基本props之外，额外增加了一些配置
