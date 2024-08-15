@@ -2,7 +2,7 @@
 
 ## Project setup
 ```
-npm install
+npm i cross-text-highlight
 ```
 # 基于vue-search-highlight 的跨标签可标注序号的文本高亮插件
 
@@ -77,6 +77,7 @@ default: 'htmlContent'
 ```html
 <template>
     <div id="app">
+    <!-- 外层的id htmlContent 一定要和组件属性pEle保持一致  -->
         <div ref="htmlContent" id="htmlContent">
             <button @click="goTo">指定位置</button>
             <button @click="goBfter">第一个</button>
@@ -120,8 +121,6 @@ default: 'htmlContent'
                 this.matchCount = count
             },
             goTo(){
-                this.keyword = ""
-                console.log(this.$refs.search)
                 this.$refs.search.scrollToOrder(2,this.$refs.search)
             },
             goBfter(){

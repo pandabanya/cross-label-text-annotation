@@ -306,8 +306,8 @@ export default {
       }
       if(!arr[index]){
         console.log("未找到该节点")
+        return
       }
-      console.dir(arr)
       let canvas = document.createElement('canvas')
       canvas.width = 200 // 设置canvas宽度
       canvas.height = 200 // 设置canvas高度
@@ -324,7 +324,7 @@ export default {
       imageElement.src = img.src
       // imageElement.style.zIndex = `${index}`
       imageElement.className = `custom-marker`
-      imageElement.style.setProperty('width', `${this.markWidth}`);
+      imageElement.style.setProperty('width', `${this.markWidth}`,'!important');
       imageElement.style.setProperty('height', `${this.markHeight}`,'!important');
       imageElement.style.setProperty('border-radius', '50%');
       imageElement.style.setProperty('background', `linear-gradient(to right, ${this.startColor}, ${this.endColor})`);
