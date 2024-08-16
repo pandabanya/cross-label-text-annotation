@@ -20,11 +20,14 @@
 -->
 <template>
   <div class="highlight" v-html="contentShow">
+    <ul id="rightMenu">
+      <li></li>
+    </ul>
   </div>
 </template>
 
 <script>
-const PLUGIN_FLAG = 'cross-text-hightlight'
+const FONT_FLAG = 'cross-text-hightlight'
 
 export default {
   name: 'CrossTextHighLight',
@@ -120,7 +123,7 @@ export default {
       return [this.lightIndex, this.highlightStyle, this.currentStyle]
     },
     flag() {
-      return `${PLUGIN_FLAG}${this.random}`
+      return `${FONT_FLAG}${this.random}`
     },
     styleSelector() {
       return `style[${this.flag}]`
@@ -323,9 +326,14 @@ export default {
       let imageElement = document.createElement('img')
       imageElement.src = img.src
       // imageElement.style.zIndex = `${index}`
-      imageElement.className = `custom-marker`
-      imageElement.style.setProperty('width', `${this.markWidth}`,'!important');
-      imageElement.style.setProperty('height', `${this.markHeight}`,'!important');
+      imageElement.className = `common-marker custom-marker${index}`
+
+      imageElement.addEventListener('contextmenu',(event) => {
+        console.log(event,'右键被点击了！')
+      })
+
+      imageElement.style.setProperty('width', `${this.markWidth}`);
+      imageElement.style.setProperty('height', `${this.markHeight}`);
       imageElement.style.setProperty('border-radius', '50%');
       imageElement.style.setProperty('background', `linear-gradient(to right, ${this.startColor}, ${this.endColor})`);
       imageElement.style.setProperty('color', `${this.textColor}`);
