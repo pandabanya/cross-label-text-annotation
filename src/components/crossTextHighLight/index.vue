@@ -19,11 +19,10 @@
  文本标注序号用法
 -->
 <template>
-  <div class="highlight" v-html="contentShow">
-    <ul id="rightMenu">
-      <li></li>
-    </ul>
-  </div>
+  <div class="content-main">
+    <div class="highlight" v-html="contentShow">
+    </div>
+  </div>  
 </template>
 
 <script>
@@ -35,6 +34,10 @@ export default {
     content: {
       type: String,
       default: ''
+    },
+    moveBehavior: {
+      type: Boolean,
+      default: false
     },
     keyword: {
       type: String,
@@ -107,6 +110,7 @@ export default {
       default: 'htmlContent'
     }
   },
+  
   data() {
     return {
       lightIndex: 0,
@@ -160,6 +164,23 @@ export default {
       this.$nextTick(()=>{
         this.markNumber(0)
       })
+    }
+    // 选中监听
+    if(this.moveBehavior){
+      let selectedText = '';
+      document.onmouseup = (event) => {
+        selectedText = window.getSelection().toString();
+        event.preventDefault();
+        if(selectedText){
+          this.$emit('selection-change', selectedText, event.offsetX, event.offsetY);
+        }
+      };
+      document.oncontextmenu = (event) => {
+        console.log(event);
+        if (selectedText !== '') {
+          event.preventDefault();
+        }
+      };
     }
   },
   beforeDestroy() {

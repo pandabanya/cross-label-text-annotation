@@ -8,6 +8,7 @@
       <crossTextHighLight
           ref="search"
           @current-change="currentChange"
+          :move-behavior="true"
           :content="text"
           :keyword="keyword"
           :is-need-mark="true"
@@ -15,6 +16,7 @@
           @match-count-change="matchCountChange"
           :highlightStyle="`background: #ffff00`"
           :currentStyle="`background: rgb(224, 234, 250)`"
+          @selection-change="selectionChange"
       />
 
     </div>
@@ -121,7 +123,10 @@ export default {
     },
     goAfter2(){
       this.$refs.search.scrollToOrder(3,this.$refs.search)
-    }
+    },
+    selectionChange(text, x, y){
+      console.log('文本， x， y：' ,text, x, y);
+    },
   }
 }
 </script>
