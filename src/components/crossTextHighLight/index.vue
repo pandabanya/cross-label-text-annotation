@@ -11,18 +11,27 @@
     @current-change="currentChange"
     :content="text"
     :keyword="keyword"
+    :isContextMenu='isContextMenu'
     highlightStyle="background: rgb(224, 234, 250)"
     currentStyle="{background: rgb(224, 234, 250)}"
+    @selection-change='selectionChange'
   />
  </div>
 
  文本标注序号用法
 -->
 <template>
-  <div class="content-main">
-    <div class="highlight" v-html="contentShow">
+  <div class="content-main" @contextmenu.prevent.stop="openContextMenu" @mouseup="handleMouseUp">
+    <div v-if="showContentMenu" id="contentMenu" :style="{ 'left': left + 'px', 'top': top + 'px' }">
+      <ul>
+        <li @click="copy">
+          <i class="el-icon-copy-document"></i>
+          <span>复制</span>
+        </li>
+      </ul>
     </div>
-  </div>  
+    <div id="highlight" class="highlight" v-html="contentShow"></div>
+  </div>
 </template>
 
 <script>
@@ -35,7 +44,7 @@ export default {
       type: String,
       default: ''
     },
-    moveBehavior: {
+    moveBehavior: { 
       type: Boolean,
       default: false
     },
@@ -80,7 +89,7 @@ export default {
       type: String,
       default: '#ff9632'
     },
-    markLeft:{
+    markLeft: {
       type: String,
       default: '-30px'
     },
@@ -108,14 +117,22 @@ export default {
     pEle: {
       type: String,
       default: 'htmlContent'
+    },
+    isContextMenu: {
+      type: Boolean,
+      default: false
     }
   },
-  
+
   data() {
     return {
+      left: 0,
+      top: 0,
+      showContentMenu: false,
       lightIndex: 0,
       matchCount: 0,
       contentShow: '',
+      copyText: '',
       random: `${Math.random()}`.slice(2)
     }
   },
@@ -160,33 +177,77 @@ export default {
     }
   },
   mounted() {
-    if(this.isNeedMark){
-      this.$nextTick(()=>{
+    if (this.isNeedMark) {
+      this.$nextTick(() => {
         this.markNumber(0)
       })
     }
     // 选中监听
-    if(this.moveBehavior){
-      let selectedText = '';
-      document.onmouseup = (event) => {
-        selectedText = window.getSelection().toString();
-        event.preventDefault();
-        if(selectedText){
-          this.$emit('selection-change', selectedText, event.offsetX, event.offsetY);
-        }
-      };
-      document.oncontextmenu = (event) => {
-        console.log(event);
-        if (selectedText !== '') {
-          event.preventDefault();
-        }
-      };
+    document.onclick = (event) => {
+      console.log(event);
+      if (this.showContentMenu && this.checkIn(document.getElementById('contentMenu'))) {
+        return
+      }
+      this.showContentMenu = false
     }
   },
   beforeDestroy() {
     this.clearStyle()
   },
   methods: {
+    handleMouseUp() {
+      if (!this.moveBehavior) return
+      let selectedText = '';
+      selectedText = window.getSelection().toString()
+      console.log(selectedText);
+      if (selectedText) {
+        this.copyText = selectedText
+      }
+      if (!this.showContentMenu && this.checkIn(document.getElementById('highlight'))) {
+        this.left = event.offsetX
+        this.top = event.offsetY
+      }
+      this.$emit('selection-change', selectedText, event.offsetX, event.offsetY);
+    },
+    copy() {
+      this.$copyText(this.copyText).then((e) => {
+        this.$message({
+          message: '复制成功',
+          type: 'success'
+        })
+        console.log(e)
+      }, (e) => {
+        this.$message({
+          message: '复制失败',
+          type: 'error'
+        })
+        console.log(e)
+      })
+    },
+    openContextMenu() {
+      if (!this.isContextMenu) return
+      this.showContentMenu = true
+    },
+    checkIn(obj) {
+      var x = Number(window.event.clientX) // 鼠标相对屏幕横坐标
+      var y = Number(window.event.clientY) // 鼠标相对屏幕纵坐标
+
+      var div_x = Number(obj.getBoundingClientRect().left) // obj相对屏幕的横坐标
+      var div_x_width = Number(
+        obj.getBoundingClientRect().left + obj.clientWidth
+      ) // obj相对屏幕的横坐标+width
+
+      var div_y = Number(obj.getBoundingClientRect().top) // obj相对屏幕的纵坐标
+      var div_y_height = Number(
+        obj.getBoundingClientRect().top + obj.clientHeight
+      ) // obj相对屏幕的纵坐标+height
+
+      if (x > div_x && x < div_x_width && y > div_y && y < div_y_height) {
+        return true
+      } else {
+        return false
+      }
+    },
     getTextNodeList(dom) {
       const nodeList = [...dom.childNodes]
       const textNodes = []
@@ -236,7 +297,7 @@ export default {
         const matchStart = match.index, matchEnd = matchStart + match[0].length // 匹配结果在拼接字符串中的起止索引
         // 遍历文本信息列表，查找匹配的文本节点
         for (let textIdx = 0; textIdx < textList.length; textIdx++) {
-          const {text, startIdx, endIdx} = textList[textIdx] // 文本内容、文本在拼接串中开始、结束索引
+          const { text, startIdx, endIdx } = textList[textIdx] // 文本内容、文本在拼接串中开始、结束索引
           if (endIdx < matchStart) continue // 匹配的文本节点还在后面
           if (startIdx >= matchEnd) break // 匹配文本节点已经处理完了
           let textNode = textNodes[textIdx] // 这个节点中的部分或全部内容匹配到了关键词，将匹配部分截取出来进行替换
@@ -272,7 +333,7 @@ export default {
       div.innerHTML = this.content
       const textNodes = this.getTextNodeList(div)
       const textList = this.getTextInfoList(textNodes)
-      const content = textList.map(({text}) => text).join('')
+      const content = textList.map(({ text }) => text).join('')
       const matchList = this.getMatchList(content, this.keyword)
       this.matchCount = matchList.length
       this.lightIndex = this.matchCount ? 1 : 0
@@ -290,26 +351,26 @@ export default {
         if (node) {
           this.lightIndex = index
           // 标记序号
-          if(this.isNeedMark){
-            this.markNumber(index - 1,this.pEle)
+          if (this.isNeedMark) {
+            this.markNumber(index - 1, this.pEle)
           }
           // 外层包裹的盒子
           const contentElement2 = document.getElementById(this.pEle)
 
-          setTimeout(()=>{
+          setTimeout(() => {
             const contentDiv = cEle; // 获取 ref 为 "content" 的 DOM 元素
             if (contentDiv) {
               const contentRect = contentDiv.$el.getBoundingClientRect() // 获取 contentDiv 的位置
               const highlightRect = node.getBoundingClientRect() // 获取 highlightedElement 的位置
               // 计算相对于 contentDiv 的位置
               const relativeTop = highlightRect.top - contentRect.top;
-              contentElement2.scrollTo({top: relativeTop - 200, behavior: 'smooth'});
+              contentElement2.scrollTo({ top: relativeTop - 200, behavior: 'smooth' });
             }
-          },100)
+          }, 100)
         }
       })
     },
-    scrollTo(index){
+    scrollTo(index) {
       this.$nextTick(() => {
         let node = this.$el.querySelector(`font[${this.flag}='${index}']`)
         if (node) {
@@ -324,11 +385,11 @@ export default {
       // 获取所有font标签
       let fonts = parent.getElementsByTagName('font');
       for (let i = 0; i < fonts.length; i++) {
-        if(fonts[i].attributes.length > 0){
+        if (fonts[i].attributes.length > 0) {
           arr.push(fonts[i])
         }
       }
-      if(!arr[index]){
+      if (!arr[index]) {
         console.log("未找到该节点")
         return
       }
@@ -336,12 +397,12 @@ export default {
       canvas.width = 200 // 设置canvas宽度
       canvas.height = 200 // 设置canvas高度
       let ctx = canvas.getContext('2d')
-      ctx.clearRect(0,0,canvas.width,canvas.height)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.font = '150px Arial' // 设置文本字体大小和样式
       ctx.fillStyle = 'white' // 设置文本颜色
       ctx.textAlign = 'center' // 设置文本水平居中
       ctx.textBaseline = 'middle' // 设置文本垂直居中
-      ctx.fillText( index + 1, 95, 110) // 在canvas上绘制文本
+      ctx.fillText(index + 1, 95, 110) // 在canvas上绘制文本
       let img = new Image()
       img.src = canvas.toDataURL()
       let imageElement = document.createElement('img')
@@ -349,8 +410,8 @@ export default {
       // imageElement.style.zIndex = `${index}`
       imageElement.className = `common-marker custom-marker${index}`
 
-      imageElement.addEventListener('contextmenu',(event) => {
-        console.log(event,'右键被点击了！')
+      imageElement.addEventListener('contextmenu', (event) => {
+        console.log(event, '右键被点击了！')
       })
 
       imageElement.style.setProperty('width', `${this.markWidth}`);
@@ -369,9 +430,9 @@ export default {
       imageElement.style.setProperty('text-align', 'center');
       imageElement.style.setProperty('user-select', 'none');
       imageElement.style.setProperty('z-index', '999');
-      imageElement.style.setProperty('max-width', 'none','!important');
+      imageElement.style.setProperty('max-width', 'none', '!important');
       // 清除之前节点
-      document.querySelectorAll(".custom-marker").forEach(element => {
+      document.querySelectorAll(".common-marker").forEach(element => {
         element.remove();
       })
       // 把之前节点去掉
@@ -407,5 +468,61 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.content-main {
+  position: relative;
 
+  #contentMenu {
+    position: absolute;
+    background: #f5f5f5;
+    border: 1px solid #222;
+    border-radius: 10px;
+    z-index: 10;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 2px;
+      //background-color: #fff;
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      background-color: #2e3138;
+      color: rgba(255, 255, 255, 0.85);
+
+      li {
+        padding: 10px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        width: 112px;
+        font-size: 14px;
+        padding: 0 11px;
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: rgba(255, 255, 255, 0.85);
+        height: 34px;
+        line-height: 34px;
+        box-sizing: border-box;
+        cursor: pointer;
+
+        i {
+          width: 12px;
+          height: 12px;
+        }
+
+        span {
+          margin-left: 6px;
+          font-size: 12px;
+        }
+
+        &:hover {
+          background: rgba(204, 229, 255, 0.08);
+        }
+      }
+    }
+
+  }
+}
 </style>

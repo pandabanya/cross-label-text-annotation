@@ -8,7 +8,7 @@
       <crossTextHighLight
           ref="search"
           @current-change="currentChange"
-          :move-behavior="true"
+          :move-behavior="false"
           :content="text"
           :keyword="keyword"
           :is-need-mark="true"

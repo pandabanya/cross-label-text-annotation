@@ -22,3 +22,9 @@ html {
 #app {
   height: 100%;
 }
+
+ul li{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
