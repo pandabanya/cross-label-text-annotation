@@ -12,10 +12,14 @@
           :content="text"
           :keyword="keyword"
           :is-need-mark="true"
+          :is-context-menu="true"
           :pEle="`htmlContent`"
           @match-count-change="matchCountChange"
-          :highlightStyle="`background: #ffff00`"
-          :currentStyle="`background: rgb(224, 234, 250)`"
+          :start-color="`#409EFF`"
+          :end-color="`#E0EAFA`"
+          :border-color="`#E0EAFA`"
+          highlightStyle="background: rgb(224, 234, 250)"
+          currentStyle="{background: rgb(224, 234, 250)}"
           @selection-change="selectionChange"
       />
 
@@ -42,7 +46,7 @@ export default {
       江天一色无纤尘，皎皎空中孤月轮。
       江畔何人初见月？江月何年初照人？
       人生代代无穷已，江月年年望相似。
-      不知江月待何人，但见长江送流水。
+      不知江月待何我的天人，但见长江送流水。
       白云一片去悠悠，青枫浦上不胜愁。
       谁家今夜扁舟子？何处相思明<b>月</b>楼？
       可怜楼上月徘徊，应照离人妆镜台。
@@ -98,22 +102,56 @@ export default {
       斜月沉沉藏海雾，碣石潇湘无限路。
       不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
       斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。撒大多数, 不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路咋回事呢。
+      不知乘月几人归，落月摇情满江树。 不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树 不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。撒大多数, 不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
+      不知乘月几人归，落月摇情满江树。 江水流春去欲尽，江潭落月复西斜。
+      斜月沉沉藏海雾，碣石潇湘无限路。
       不知乘月几人归，落月摇情满江树。撒大多数`,
       keyword: "江月",
       matchCount: 0,
+      index: 0,
     }
   },
   methods: {
-    currentChange(){
-
-    },
     matchCountChange (count) {
       this.matchCount = count
+    },
+    currentChange (idx) {
+      this.currentIdx = idx
     },
     goTo(){
       this.keyword = "撒大多数"
       console.log(this.$refs.search)
-      this.$refs.search.scrollToOrder(2,this.$refs.search)
+      this.index += 1
+      this.$refs.search.scrollToOrder(this.index,this.$refs.search)
     },
     goBfter(){
       this.$refs.search.scrollToOrder(1,this.$refs.search)

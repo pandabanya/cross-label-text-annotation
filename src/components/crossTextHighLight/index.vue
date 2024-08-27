@@ -196,7 +196,7 @@ export default {
   },
   methods: {
     handleMouseUp() {
-      if (!this.moveBehavior) return
+      if (!this.isContextMenu) return
       let selectedText = '';
       selectedText = window.getSelection().toString()
       console.log(selectedText);
@@ -342,7 +342,7 @@ export default {
     },
     /**
      * scrollToOrder 滚动方法
-     * @param index 当前序号
+     * @param index 当前序号 
      * @param cEle 子元素也是文本内容元素
      */
     scrollToOrder(index, cEle) {
@@ -367,6 +367,9 @@ export default {
               contentElement2.scrollTo({ top: relativeTop - 200, behavior: 'smooth' });
             }
           }, 100)
+        }else{
+          console.log("未找到该节点")
+          return
         }
       })
     },
@@ -408,7 +411,7 @@ export default {
       let imageElement = document.createElement('img')
       imageElement.src = img.src
       // imageElement.style.zIndex = `${index}`
-      imageElement.className = `common-marker custom-marker${index}`
+      imageElement.className = `common-marker`
 
       imageElement.addEventListener('contextmenu', (event) => {
         console.log(event, '右键被点击了！')
@@ -473,8 +476,6 @@ export default {
 
   #contentMenu {
     position: absolute;
-    background: #f5f5f5;
-    border: 1px solid #222;
     border-radius: 10px;
     z-index: 10;
 
