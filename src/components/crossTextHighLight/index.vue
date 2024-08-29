@@ -199,7 +199,6 @@ export default {
       if (!this.isContextMenu) return
       let selectedText = '';
       selectedText = window.getSelection().toString()
-      console.log(selectedText);
       if (selectedText) {
         this.copyText = selectedText
       }
@@ -226,6 +225,10 @@ export default {
     },
     openContextMenu() {
       if (!this.isContextMenu) return
+      if(!window.getSelection().toString()){
+        return 
+      }
+      console.log(window.getSelection().toString());
       this.showContentMenu = true
     },
     checkIn(obj) {
@@ -388,7 +391,6 @@ export default {
       // 获取所有font标签
       let fonts = parent.getElementsByTagName('font');
       for (let i = 0; i < fonts.length; i++) {
-        console.log(fonts[i].attributes);
         if (fonts[i].attributes.length > 0 && fonts[i].attributes[0].name.search('cross-text-hightlight') != -1) {
           arr.push(fonts[i])
         }
@@ -441,13 +443,13 @@ export default {
     searchNext() {
       this.$nextTick(() => {
         let idx = this.lightIndex >= this.matchCount ? 1 : this.lightIndex + 1
-        this.scrollTo(idx)
+        this.scrollToOrder(idx)
       })
     },
     searchLast() {
       this.$nextTick(() => {
         let idx = this.lightIndex <= 1 ? this.matchCount : this.lightIndex - 1
-        this.scrollTo(idx)
+        this.scrollToOrder(idx)
       })
     },
     setStyle() {
