@@ -388,7 +388,8 @@ export default {
       // 获取所有font标签
       let fonts = parent.getElementsByTagName('font');
       for (let i = 0; i < fonts.length; i++) {
-        if (fonts[i].attributes.length > 0) {
+        console.log(fonts[i].attributes);
+        if (fonts[i].attributes.length > 0 && fonts[i].attributes[0].name.search('cross-text-hightlight') != -1) {
           arr.push(fonts[i])
         }
       }
@@ -412,10 +413,6 @@ export default {
       imageElement.src = img.src
       // imageElement.style.zIndex = `${index}`
       imageElement.className = `common-marker`
-
-      imageElement.addEventListener('contextmenu', (event) => {
-        console.log(event, '右键被点击了！')
-      })
 
       imageElement.style.setProperty('width', `${this.markWidth}`);
       imageElement.style.setProperty('height', `${this.markHeight}`);
