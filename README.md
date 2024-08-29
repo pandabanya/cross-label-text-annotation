@@ -158,3 +158,4 @@ default: 'htmlContent'
 
 2. 2024-8-29
 - 过滤了同类型的font标签，只保留特征font标签
+- 以及一些bug修复
