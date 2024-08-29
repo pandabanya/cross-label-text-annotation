@@ -1,12 +1,14 @@
 {
   "name": "cross-text-highlight",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": false,
   "keywords": [
     "vue",
     "关键字高亮",
     "vue-search-highlight",
-    "匹配跨标签文本高亮并带标注"
+    "匹配跨标签文本高亮并可带上标注序号",
+    "可以选中文本右键点击复制",
+    "也对外暴露方法提供位置信息和文本"
   ],
   "license": "MIT",
   "main": "dist/cross-text-highlight.common.js",
