@@ -193,6 +193,9 @@ export default {
   },
   beforeDestroy() {
     this.clearStyle()
+    document.removeEventListener('click', (event) => {
+      console.log(event)
+    })
   },
   methods: {
     handleMouseUp() {
