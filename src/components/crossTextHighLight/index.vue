@@ -183,8 +183,8 @@ export default {
       })
     }
     // 选中监听
-    document.onclick = (event) => {
-      console.log(event);
+    document.onclick = () => {
+      // console.log(event);
       if (this.showContentMenu && this.checkIn(document.getElementById('contentMenu'))) {
         return
       }
@@ -193,8 +193,8 @@ export default {
   },
   beforeDestroy() {
     this.clearStyle()
-    document.removeEventListener('click', (event) => {
-      console.log(event)
+    document.removeEventListener('click', () => {
+      // console.log(event)
     })
   },
   methods: {
@@ -212,12 +212,12 @@ export default {
       this.$emit('selection-change', selectedText, event.offsetX, event.offsetY);
     },
     copy() {
-      this.$copyText(this.copyText).then((e) => {
+      this.$copyText(this.copyText).then(() => {
         this.$message({
           message: '复制成功',
           type: 'success'
         })
-        console.log(e)
+        // console.log(e)
       }, (e) => {
         this.$message({
           message: '复制失败',
